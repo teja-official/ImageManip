@@ -27,6 +27,8 @@ document.getElementById('search').addEventListener('keyup', function() {
     fd.append("csrfmiddlewaretoken", "{{csrf_token}}");
     xhr.open('POST', "{% url 'search' %}" , true);
     xhr.send(fd);
+  } else {
+    document.getElementById('results').innerHTML = "";
   }
 })
 </script>

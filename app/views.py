@@ -37,9 +37,19 @@ from .serializers import *
 def image_api(request):
     if request.method == 'GET':
       kw = request.data.get('q')
+      all = request.data.get('all')
+      if all:
+        serializer = ImageSerializer(Image.objects.all(), many=True)
+        response = serializer.data
+        if response:
+          return Response(response)
+        return Response([{"error": "No images found"}])
       if kw:
         serializer = ImageSerializer(Image.objects.filter(name__icontains=kw)[:5], many=True)
-        return Response(serializer.data)
+        response = serializer.data
+        if response:
+          return Response(response)
+        return Response([{"error": "No images found"}])
       return Response([{"error": "Please provide a valid image names"}])
     elif request.method == 'POST':
       serializer = ImageUploadSerializer(data=request.data)
@@ -49,7 +59,7 @@ def image_api(request):
       image = request.data.get('image')
       if image:
         try:
-          Image.objects.get(name=image).delete()
+          Image.objects.get(id=image).delete()
           return Response([{"response": "Image has been deleted"}])
         except Image.DoesNotExist:
-          return Response([{"error": "No image found with this name"}])
+          return Response([{"error": "No image found with this id"}])
