@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Image Search</h1>
+<p class="lead"> </p>
+<div class="main">
+  <div class="form-group has-search">
+    <span class="fa fa-search form-control-feedback"></span>
+    <input type="text" class="form-control" placeholder="Search images here..." id="search">
+  </div>
+</div>
+
+<div id="results"></div>
+
+<script type="text/javascript">
+document.getElementById('search').addEventListener('keyup', function() {
+  var kw = this.value.trim();
+  if (kw != "") {
+    var xhr = new XMLHttpRequest();
+    xhr.addEventListener('readystatechange', function(e){
+      if(this.readyState == 4 && this.status == 200){
+        document.getElementById('results').innerHTML = this.responseText
+      }
+    });
+    var fd = new FormData();
+    fd.append("kw", kw);
+    fd.append("csrfmiddlewaretoken", "{{csrf_token}}");
+    xhr.open('POST', "{% url 'search' %}" , true);
+    xhr.send(fd);
+  }
+})
+</script>
+{% endblock %}

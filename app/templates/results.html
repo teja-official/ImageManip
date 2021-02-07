@@ -1,0 +1,16 @@
+{% load tz %}
+
+<div class="my-3 p-3 bg-white rounded shadow-sm">
+  {% for i in images %}
+  <div class="d-flex text-muted pt-3">
+    <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
+      <div class="d-flex justify-content-between">
+        <strong class="text-gray-dark">{{i.name}}</strong>
+        <p>{{i.created_at|timezone:"Asia/Kolkata"}}</p>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <p class="text-danger">No images found with this name</p>
+  {% endfor %}
+</div>
